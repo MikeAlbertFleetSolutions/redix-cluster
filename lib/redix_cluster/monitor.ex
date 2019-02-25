@@ -115,11 +115,9 @@ defmodule RedixCluster.Monitor do
 
   def start_link_redix(host, port) do
   socket_opts = get_env(:socket_opts, [])
-  backoff = get_env(:backoff, 2000)
-  max_reconnection_attempts = get_env(:max_reconnection_attempts)
     :erlang.process_flag(:trap_exit, true)
-    result = Redix.start_link([host: host, port: port],
-      [socket_opts: socket_opts, backoff: backoff, max_reconnection_attempts: max_reconnection_attempts])
+    result = Redix.start_link("redis://#{host}:#{port}",
+      [socket_opts: socket_opts])
     :erlang.process_flag(:trap_exit, false)
     result
   end
@@ -156,8 +154,10 @@ defmodule RedixCluster.Monitor do
       |> String.to_atom
   end
 
+  defp parse_master_node([[master_host, master_port, _]|_]), do: parse_master_node([[master_host, master_port]])
+
   defp parse_master_node([[master_host, master_port]|_]) do
-    %{host: to_char_list(master_host),
+    %{host: to_charlist(master_host),
       port: master_port,
       pool: nil
      }

@@ -7,9 +7,9 @@ defmodule BaseBench do
     Application.ensure_all_started(:eredis_cluster)
     context =
       %{
-        cmds: make_random_cmds,
-        pipelines: make_random_pipelines,
-        transactions: make_random_transactions,
+        cmds: make_random_cmds(),
+        pipelines: make_random_pipelines(),
+        transactions: make_random_transactions(),
       }
     {:ok, context}
   end
