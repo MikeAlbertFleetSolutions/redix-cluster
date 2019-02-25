@@ -16,7 +16,7 @@ defmodule RedixCluster.Pools.Supervisor do
 
   def init(nil), do: {:ok, {{:one_for_one, 1, 5}, []}}
 
-  @spec new_pool(char_list, integer) :: {:ok, atom}|{:error, atom}
+  @spec new_pool(charlist, integer) :: {:ok, atom}|{:error, atom}
   def new_pool(host, port) do
     pool_name = ["Pool", host, ":", port] |> Enum.join |> String.to_atom
     case Process.whereis(pool_name) do
